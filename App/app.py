@@ -5,7 +5,17 @@ import skops.io as sio
 svm_pipeline = sio.load("./Model/breast_cancer_svm_pipeline.skops", trusted=True)
 
 
-def predict_cancer(cl_thickness, cell_size, cell_shape, marg_adhesion, epith_size, bare_nuclei, bl_cromatin, norm_nucleoli, mitoses):
+def predict_cancer(
+    cl_thickness,
+    cell_size,
+    cell_shape,
+    marg_adhesion,
+    epith_size,
+    bare_nuclei,
+    bl_cromatin,
+    norm_nucleoli,
+    mitoses,
+):
     """Predict breast cancer based on patient features.
 
     Args:
@@ -22,7 +32,19 @@ def predict_cancer(cl_thickness, cell_size, cell_shape, marg_adhesion, epith_siz
     Returns:
         str: Predicted breast cancer class (benign or malignant)
     """
-    features = [[cl_thickness, cell_size, cell_shape, marg_adhesion, epith_size, bare_nuclei, bl_cromatin, norm_nucleoli, mitoses]]
+    features = [
+        [
+            cl_thickness,
+            cell_size,
+            cell_shape,
+            marg_adhesion,
+            epith_size,
+            bare_nuclei,
+            bl_cromatin,
+            norm_nucleoli,
+            mitoses,
+        ]
+    ]
     predicted_class = svm_pipeline.predict(features)[0]
 
     return "benign" if predicted_class == 0 else "malignant"
@@ -30,7 +52,7 @@ def predict_cancer(cl_thickness, cell_size, cell_shape, marg_adhesion, epith_siz
 
 # Define Gradio inputs
 inputs = [
-	gr.Slider(minimum=1, maximum=10, step=1, label="Clump Thickness"),
+    gr.Slider(minimum=1, maximum=10, step=1, label="Clump Thickness"),
     gr.Slider(minimum=1, maximum=10, step=1, label="Uniformity of Cell Size"),
     gr.Slider(minimum=1, maximum=10, step=1, label="Uniformity of Cell Shape"),
     gr.Slider(minimum=1, maximum=10, step=1, label="Marginal Adhesion"),
@@ -47,7 +69,6 @@ output = gr.Label(num_top_classes=2, label="class")
 # Launch the Gradio interface
 
 
-
 title = "Breast Cancer Classification"
 description = "Enter the details to correctly identify cell type?"
 
@@ -58,7 +79,6 @@ gr.Interface(
     outputs=output,
     title=title,
     description=description,
-    theme=gr.themes.Soft(primary_hue="rose",secondary_hue="gray"),
-    css="footer {visibility: hidden}"
-
+    theme=gr.themes.Soft(primary_hue="rose", secondary_hue="gray"),
+    css="footer {visibility: hidden}",
 ).launch()
